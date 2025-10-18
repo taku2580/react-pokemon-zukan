@@ -20,9 +20,11 @@ const PokemonList: React.FC = () => {
     queryKey: apiQueryKeys.pokemon.list().queryKey,
     queryFn: ({ pageParam = 0 }) => fetchPokemonListWithJapaneseNames(pageParam),
     initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.next) {
-        return pages.length * 20;
+        const url = new URL(lastPage.next);
+        const offset = url.searchParams.get('offset');
+        return offset ? Number(offset) : undefined;
       }
       return undefined;
     },
@@ -91,6 +93,3 @@ const PokemonListSkeleton: React.FC = () => {
 };
 
 export default PokemonList;
-
-
-
